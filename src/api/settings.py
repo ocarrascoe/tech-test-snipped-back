@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_auth',
     'rest_framework.authtoken',
     # Utilities
+    'djmoney',
     'corsheaders',
     'django_seed',
     'django_createsuperuserwithpassword',
