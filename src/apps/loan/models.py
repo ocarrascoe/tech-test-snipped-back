@@ -12,4 +12,4 @@ class Loan(models.Model):
     usuariocodigo = models.ForeignKey(User, on_delete=models.PROTECT)
     fechaprestamo = models.DateField(blank=True, null=False, default=date.today())
     fechamaximadevolucion = models.DateField(blank=True, null=False, default=(date.today() + timedelta(days=15)))
-    fechadevolucion = models.DateField(blank=False, null=False)
+    fechadevolucion = models.DateField(blank=True, null=True)
