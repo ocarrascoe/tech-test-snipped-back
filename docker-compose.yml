@@ -9,11 +9,13 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - ./api:/app
+      - ./src:/app
     command: >
       sh -c "python manage.py wait_for_db &&
              python manage.py makemigrations &&
              python manage.py migrate  &&
+             python manage.py createsuperuserwithpassword --username admin --password admin --email admin@example.com --preserve &&
+             python manage.py seed_database --mode=refresh &&
              python manage.py runserver 0.0.0.0:8000"
     env_file:
       - ./.env
@@ -23,7 +25,7 @@ services:
       - app-network
 
   postgres:
-    container_name: postgres
+    container_name: postgresql
     image: postgres
     restart: always
     volumes:
@@ -31,7 +33,9 @@ services:
     env_file:
       - ./.env.db
     ports:
-      - 5432:5432
+      - 5433:5432
+    networks:
+      - app-network
 
 volumes:
   postgres_data:
