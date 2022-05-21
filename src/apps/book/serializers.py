@@ -1,10 +1,21 @@
 from rest_framework import serializers
 
 from apps.book.models import Book
+from apps.loan.models import Loan
 
+
+# Relations
+
+class LoanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Loan
+        fields = '__all__'
+
+
+# Base
 
 class BookSerializer(serializers.ModelSerializer):
-    """Serializes a user object for listing them all"""
+    loans = LoanSerializer(source='loan_set', many=True)
 
     class Meta:
         model = Book
@@ -12,7 +23,7 @@ class BookSerializer(serializers.ModelSerializer):
 
 
 class BookListSerializer(serializers.ModelSerializer):
-    """Serializes a user object for listing them all"""
+    loans = LoanSerializer(source='loan_set', many=True)
 
     class Meta:
         model = Book
@@ -20,32 +31,24 @@ class BookListSerializer(serializers.ModelSerializer):
 
 
 class BookCreateSerializer(serializers.ModelSerializer):
-    """Serializes a user object for listing them all"""
-
     class Meta:
         model = Book
         fields = '__all__'
 
 
 class BookUpdateSerializer(serializers.ModelSerializer):
-    """Serializes a user object for listing them all"""
-
     class Meta:
         model = Book
         fields = '__all__'
 
 
 class BookPartialUpdateSerializer(serializers.ModelSerializer):
-    """Serializes a user object for listing them all"""
-
     class Meta:
         model = Book
         fields = '__all__'
 
 
 class BookDeleteSerializer(serializers.ModelSerializer):
-    """Serializes a user object for listing them all"""
-
     class Meta:
         model = Book
         fields = '__all__'
