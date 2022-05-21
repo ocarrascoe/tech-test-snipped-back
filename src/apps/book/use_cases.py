@@ -7,27 +7,49 @@ from apps.book.repositories import BookRepository
 
 
 class BookUseCases:
-    @staticmethod
-    def get_book(book_id: int):
+    # Set book as available (not loaned), this is not a real attribute,
+    # it is just a flag to indicate if the book is available or not for frontend management.
+    def set_availability(self, payload):
+        print('payload: ', payload)
+        print('len(payload): ', len(payload))
+        if isinstance(payload, dict):
+            is_available = True
+            if payload['loans']:
+                for loan in payload['loans']:
+                    if not loan['fechadevolucion']:
+                        is_available = False
+            payload['is_available'] = is_available
+        else:
+            for book in payload:
+                is_available = True
+                print('book: ', book)
+                if 'loans' in book.keys():
+                    for loan in book['loans']:
+                        if not loan['fechadevolucion']:
+                            is_available = False
+                book['is_available'] = is_available
+        return payload
+
+    def get_book(self, book_id: int):
         try:
             book = BookRepository.get_book(book_id)
-            book_serialized = serializers.BookSerializer(book)
-            return {'data': book_serialized.data, 'status': status.HTTP_200_OK}
+            serialized_books = serializers.BookSerializer(book).data
+            serialized_books = self.set_availability(payload=serialized_books)
+            return {'data': serialized_books, 'status': status.HTTP_200_OK}
         except ObjectDoesNotExist:
             return {'data': {'error': 'Book does not exist!'}, 'status': status.HTTP_404_NOT_FOUND}
 
-    @staticmethod
-    def get_books():
+    def get_books(self):
         try:
             books = BookRepository.get_books()
             print('books: ', books)
             serialized_books = serializers.BookListSerializer(books, many=True)
-            return {'data': serialized_books.data, 'status': status.HTTP_200_OK}
+            serialized_books = self.set_availability(payload=serialized_books.data)
+            return {'data': serialized_books, 'status': status.HTTP_200_OK}
         except ObjectDoesNotExist:
             return {'data': {'error': 'Books not found.'}, 'status': status.HTTP_404_NOT_FOUND}
 
-    @staticmethod
-    def create_book(book):
+    def create_book(self, book):
         # Apply business logic here
         print('book.data: ', book.data)
         book, created = BookRepository.create_book(book.data)
@@ -38,8 +60,7 @@ class BookUseCases:
         else:
             return {'data': {'error': 'Book already exists.'}, 'status': status.HTTP_409_CONFLICT}
 
-    @staticmethod
-    def update_book(request, book_id: int):
+    def update_book(self, request, book_id: int):
         # Apply business logic here
         book = BookRepository.get_book(book_id)
         serialized_book = serializers.BookUpdateSerializer(book, data=request.data)
@@ -49,8 +70,7 @@ class BookUseCases:
         else:
             return {'data': serialized_book.errors, 'status': status.HTTP_400_BAD_REQUEST}
 
-    @staticmethod
-    def update_book_partially(request, book_id: int):
+    def update_book_partially(self, request, book_id: int):
         # Apply business logic here
         book = BookRepository.get_book(book_id)
         serialized_book = serializers.BookUpdateSerializer(book, data=request.data, partial=True)
@@ -60,8 +80,7 @@ class BookUseCases:
         else:
             return {'data': serialized_book.errors, 'status': status.HTTP_400_BAD_REQUEST}
 
-    @staticmethod
-    def delete_book(book_id: int):
+    def delete_book(self, book_id: int):
         # Apply business logic here
         try:
             BookRepository.delete_book(book_id)
@@ -69,8 +88,7 @@ class BookUseCases:
         except ObjectDoesNotExist:
             return {'data': {'error': 'Book does not exist!'}, 'status': status.HTTP_404_NOT_FOUND}
 
-    @staticmethod
-    def get_available_books():
+    def get_available_books(self):
         try:
             books = BookRepository.get_available_books()
             serialized_books = serializers.BookListSerializer(books, many=True)
@@ -78,8 +96,7 @@ class BookUseCases:
         except ObjectDoesNotExist:
             return {'data': {'error': 'Books not found.'}, 'status': status.HTTP_404_NOT_FOUND}
 
-    @staticmethod
-    def get_loaned_books():
+    def get_loaned_books(self):
         try:
             books = BookRepository.get_loaned_books()
             serialized_books = serializers.BookListSerializer(books, many=True)
