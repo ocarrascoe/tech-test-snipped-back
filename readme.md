@@ -1,47 +1,82 @@
 # Snippet API REST
 
-This project was built with Django and Django Rest Framework. 
-It consists of a REST API that controls all types of requests 
-made by the client.
+Proyecto para prueba técnica de Snippet, el cual es una API REST realizada con Python,
+Django y Django Rest Framework.
 
-## Available Scripts
+# Enfoque Utilizado
 
-In the project directory, you can run:
+El proyecto se ha realizado utilizando una adaptación de "Clean Architecture", donde se separa
+la lógica de negocio de la lógica de presentación, esto se ve reflejado de la siguiente forma:
+
+- views => Vistas, Recepción de las peticiones, se aboca solo al trabajo de la petición y la respuesta. 
+Invoca a los casos de uso.
+- use cases => Casos de uso, se aboca a la lógica de negocio y los serializers, es aquí donde se aplican
+las modificaciones a la data que no requieran interacción directa con la base de datos. Invoca a los repositorios.
+- repositories => Repositorios, se aboca a la base de datos. Se encarga de realizar las respectivas consultas a
+la base de datos, sea haciendo uso de la ORM o de consultas personalizadas, pero jamás modifica la data in situ.
+
+Esta arquitectura permite el reconocimiento de los errores y la corrección de los mismos en la capa que corresponde
+de manera directa, ahora, así se ha planteado para este proyecto, pero puede ser mejorable dependiendo del objetivo
+(véase el uso de las clases, encapsulación, etc).
+
+Se ha hecho uso de gitflow para el manejo de versiones, para que sea más fácil mantener el proyecto.
+
+El proyecto está completamente realizado en inglés a excepción de este archivo con el
+objetivo de una mayor comprensión de lo aquí explicado y del nombre de los
+atributos de las tablas dado la documentación entregada, esto debido a que se asume que
+dicha documentación puede haber sido planteada de esa manera para ser consumida de otro lugar
+o directamente esta se espera en español, cabe mencionar que bajo normalidad estos atributos
+también serían en inglés. Así mismo se intenta modificar las tablas lo menos posible en donde
+el único cambio hecho es una añadidura del atributo "eliminado" en la tabla "book",
+este atributo es añadido con el fin de "eliminar" el libro sin que este sea realmente eliminado
+de la base de datos y de esta manera evitar la pérdida de información de los datos previos a su
+eliminación (véase que los préstamos pierdan la respectiva referencia a este libro), por lo tanto,
+bajo este atributo es que se discrimina si interactuar o no con estos libros en las distintas acciones
+del backend.
+
+Se ha utilizado get_or_create junto a 3 atributos distintivos para evitar la creación de un libro
+que ya existe en la base de datos, esto es con el fin de mantener la restricción dada en la documentación.
+Esta medida no se ha implementado, pero si se llega a añadir/crear un libro que haya sido eliminado
+(atributo "eliminado" = True), se puede implementar de manera sencilla que en vez de generar conflicto, el libro vuelva 
+a estar activo, no se ha llevado a cabo dado que esto implica decisiones de negocio mayores (conservaría la misma id).
+Así mismo se puede hacer uso de update_or_create para, dados los atributos distintivos, actualizar el resto, nuevamente 
+esto, como los atributos distintivos, se encuentran sujetos a decisiones de negocio.
+
+
+## IMPORTANTE
+Para la creación de usuarios y de préstamos hacer uso del administrador de Django, para ingresar entrar
+a la url localhost:8000/admin/ y autenticarse con los siguientes datos:
+- username: admin
+- password: admin
+No se ha implementado soporte en la API REST para estas entidades.
+
+
+## Entorno
+
+Para las variables de entorno duplicar los archivos ".env.example" y ".env.db.example", eliminar ".example" y reemplazar
+las variables de entorno, vienen unas por defecto que se han utilizado para el desarrollo de este proyecto, pero es
+totalmente factible elegir unas propias.
+
+## JSON Postman
+
+Se añade el siguiente link con el JSON de Postman que contiene la colección de endpoints
+de este proyecto (Importar en Postman).
+
+- https://www.getpostman.com/collections/cb1e223c76a1b242b88b
+
+## Comandos Disponibles
 
 ### Build
 
-Run `docker-compose build` to build or rebuild the services.
+- `docker-compose build` para realizar el build o rebuild de los servicios.
 
-### Run the app in development mode
+### Correr la app en local
 
-Run `docker-compose up` to builds, (re)creates, starts, and attaches to
-containers for a service. Then go to [http://localhost:8000](http://localhost:8000)
-to view it in your favorite browser.
+Usar `docker-compose up` para builds, (re)crear, iniciar, los servicios.
+Entonces este será accesible desde [http://localhost:8000](http://localhost:8000)
+en tu explorador favorito.
 
-### Running unit tests
-
-Run `docker-compose run --rm django sh -c "python manage.py test && flake8"` to
-execute the unit tests and linting the source code with flake8, verifying pep8,
-pyflakes and circular complexity.
-
-### Run the app in production mode
-
-Run `docker-compose up -d --build` to first make your services builds and then,
-to start the containers in the background and leave them running.
-
-## Refresh app, rebuilding it
-
-Run `sudo docker-compose up --build --force-recreate --no-deps django` or 
-`sudo docker-compose up -d --build --force-recreate --no-deps django` to
- rebuild the django container, reinstalling its dependencies.
- 
-## Refresh app
-
-Run `sudo docker-compose up --force-recreate --no-deps django` or 
-`sudo docker-compose up -d --force-recreate --no-deps django` to
- rebuild the django container, reinstalling its dependencies.
-
-## Technologies involved
+## Tecnologías involucradas
 
 - Docker
 - Python
@@ -49,10 +84,7 @@ Run `sudo docker-compose up --force-recreate --no-deps django` or
 - PostgreSQL
 - Django Rest Framework
 
-## Utilities
-- Django fields: https://docs.djangoproject.com/en/3.0/ref/models/fields/
-
-## Django Commands
+## Comandos útiles de Django
 
 - Create superuser
     - python manage.py createsuperuser

@@ -10,8 +10,6 @@ class BookUseCases:
     # Set book as available (not loaned), this is not a real attribute,
     # it is just a flag to indicate if the book is available or not for frontend management.
     def set_availability(self, payload):
-        print('payload: ', payload)
-        print('len(payload): ', len(payload))
         if isinstance(payload, dict):
             is_available = True
             if payload['loans']:
@@ -22,7 +20,6 @@ class BookUseCases:
         else:
             for book in payload:
                 is_available = True
-                print('book: ', book)
                 if 'loans' in book.keys():
                     for loan in book['loans']:
                         if not loan['fechadevolucion']:
@@ -42,7 +39,6 @@ class BookUseCases:
     def get_books(self):
         try:
             books = BookRepository.get_books()
-            print('books: ', books)
             serialized_books = serializers.BookListSerializer(books, many=True)
             serialized_books = self.set_availability(payload=serialized_books.data)
             return {'data': serialized_books, 'status': status.HTTP_200_OK}
@@ -51,10 +47,7 @@ class BookUseCases:
 
     def create_book(self, book):
         # Apply business logic here
-        print('book.data: ', book.data)
         book, created = BookRepository.create_book(book.data)
-        print('book: ', book)
-        print('created: ', created)
         if created:
             return {'data': {'message': 'Book created.'}, 'status': status.HTTP_200_OK}
         else:
