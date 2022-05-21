@@ -42,6 +42,13 @@ a estar activo, no se ha llevado a cabo dado que esto implica decisiones de nego
 Así mismo se puede hacer uso de update_or_create para, dados los atributos distintivos, actualizar el resto, nuevamente 
 esto, como los atributos distintivos, se encuentran sujetos a decisiones de negocio.
 
+Se añade un seeder con el fin de facilitar las cosas, este llena la base de datos con los datos mínimos de inicio, 
+funciona con el siguiente comando:
+- python manage.py seed_database
+Utilizando la flag --mode=clear para borrar la base de datos y volver a llenarla.
+Utilizando la flag --mode=refresh para rellenarla siempre y cuando no encuentre ya el usuario default a crear.
+Este comando se ha agregado con refresh en el docker-compose, por lo que al correr el comando de inicio del proyecto y
+cada vez que se (re)inicie se aplicará este comando.
 
 ## IMPORTANTE
 Para la creación de usuarios y de préstamos hacer uso del administrador de Django, para ingresar entrar
