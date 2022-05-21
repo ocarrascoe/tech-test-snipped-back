@@ -16,3 +16,4 @@ class Book(models.Model):
     precio = MoneyField(blank=False, null=False, max_digits=14, decimal_places=2, default_currency='EUR', validators=[
         MinMoneyValidator(1),
     ])
+    eliminado = models.BooleanField(default=False)
