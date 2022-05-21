@@ -24,7 +24,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         run_seed(self, options['mode'])
-        self.stdout.write('done.')
+        self.stdout.write('Done.')
 
 
 def clear_data():
@@ -54,7 +54,6 @@ def create_loans():
     print('Creating loans...')
     user = User.objects.filter(nombre='Omar').get()
     book = Book.objects.filter(titulo='Don Quixote').get()
-    print('user: ', user)
     loan = Loan(librocodigo=book, usuariocodigo=user)
     loan.save()
     print('Loans created.')
@@ -68,7 +67,6 @@ def run_seed(self, mode):
     """
     # Clear data from tables
 
-    print('mode: ', mode)
     mode = mode[0]
     if mode == MODE_CLEAR:
         clear_data()
