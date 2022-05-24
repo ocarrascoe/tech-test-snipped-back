@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from djmoney.money import Money
 from rest_framework import status
 
 from apps.book import serializers
@@ -66,11 +67,14 @@ class BookUseCases:
     def update_book_partially(self, request, book_id: int):
         # Apply business logic here
         book = BookRepository.get_book(book_id)
+        if request.data['precio']:
+            request.data['precio'] = Money(amount=request.data['precio'], currency="EUR")
         serialized_book = serializers.BookUpdateSerializer(book, data=request.data, partial=True)
         if serialized_book.is_valid():
             serialized_book.save()
             return {'data': serialized_book.data, 'status': status.HTTP_200_OK}
         else:
+            print('serialized_book.errors: ', serialized_book.errors)
             return {'data': serialized_book.errors, 'status': status.HTTP_400_BAD_REQUEST}
 
     def delete_book(self, book_id: int):
