@@ -14,7 +14,7 @@ class BorrowUseCases:
         book = BorrowRepository.create_borrow(user, book)
         return {'data': {'message': 'Borrow created.'}, 'status': status.HTTP_200_OK}
 
-    def return_book(self, user_id, book_id):
+    def return_book(self, book_id):
         # Apply business logic here
-        book = BorrowRepository.return_book(user_id, book_id)
+        book = BorrowRepository.return_book(book_id)
         return {'data': {'message': 'Book returned.'}, 'status': status.HTTP_200_OK}
