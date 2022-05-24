@@ -51,11 +51,10 @@ Este comando se ha agregado con refresh en el docker-compose, por lo que al corr
 cada vez que se (re)inicie se aplicará este comando.
 
 ## IMPORTANTE
-Para la creación de usuarios y de préstamos hacer uso del administrador de Django, para ingresar entrar
-a la url localhost:8000/admin/ y autenticarse con los siguientes datos:
+Para la creación de usuarios y de préstamos (No se ha implementado soporte en la API REST para estas entidades)
+hacer uso del administrador de Django, para ingresar entrar a la url localhost:8000/admin/ y autenticarse con los siguientes datos:
 - username: admin
-- password: admin
-No se ha implementado soporte en la API REST para estas entidades.
+- password: admin  
 
 
 ## Entorno
