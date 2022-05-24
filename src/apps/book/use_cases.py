@@ -12,17 +12,17 @@ class BookUseCases:
     def set_availability(self, payload):
         if isinstance(payload, dict):
             is_available = True
-            if payload['loans']:
-                for loan in payload['loans']:
-                    if not loan['fechadevolucion']:
+            if payload['borrows']:
+                for borrow in payload['borrows']:
+                    if not borrow['fechadevolucion']:
                         is_available = False
             payload['is_available'] = is_available
         else:
             for book in payload:
                 is_available = True
-                if 'loans' in book.keys():
-                    for loan in book['loans']:
-                        if not loan['fechadevolucion']:
+                if 'borrows' in book.keys():
+                    for borrow in book['borrows']:
+                        if not borrow['fechadevolucion']:
                             is_available = False
                 book['is_available'] = is_available
         return payload
@@ -89,9 +89,9 @@ class BookUseCases:
         except ObjectDoesNotExist:
             return {'data': {'error': 'Books not found.'}, 'status': status.HTTP_404_NOT_FOUND}
 
-    def get_loaned_books(self):
+    def get_borrowed_books(self):
         try:
-            books = BookRepository.get_loaned_books()
+            books = BookRepository.get_borrowed_books()
             serialized_books = serializers.BookListSerializer(books, many=True)
             return {'data': serialized_books.data, 'status': status.HTTP_200_OK}
         except ObjectDoesNotExist:

@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'core',
     # Apps
     'apps.book',
-    'apps.loan',
+    'apps.borrow',
     'apps.user'
 ]
 
