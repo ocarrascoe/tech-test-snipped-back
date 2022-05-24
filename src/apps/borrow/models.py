@@ -11,7 +11,7 @@ def get_fechamaximadevolucion():
     return timezone.now() + timezone.timedelta(days=15)
 
 
-class Loan(models.Model):
+class Borrow(models.Model):
     numeropedido = models.AutoField(primary_key=True)
     librocodigo = models.ForeignKey(Book, on_delete=models.CASCADE)
     usuariocodigo = models.ForeignKey(User, on_delete=models.CASCADE)

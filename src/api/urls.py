@@ -20,4 +20,6 @@ urlpatterns = [
     # Common Urls
     path('admin/', admin.site.urls),
     path('books/', include('apps.book.urls')),
+    path('borrows/', include('apps.borrow.urls')),
+    path('users/', include('apps.user.urls')),
 ]

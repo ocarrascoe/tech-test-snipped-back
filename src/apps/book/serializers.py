@@ -1,21 +1,21 @@
 from rest_framework import serializers
 
 from apps.book.models import Book
-from apps.loan.models import Loan
+from apps.borrow.models import Borrow
 
 
 # Relations
 
-class LoanSerializer(serializers.ModelSerializer):
+class BorrowSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Loan
+        model = Borrow
         fields = '__all__'
 
 
 # Base
 
 class BookSerializer(serializers.ModelSerializer):
-    loans = LoanSerializer(source='loan_set', many=True)
+    borrows = BorrowSerializer(source='borrow_set', many=True)
 
     class Meta:
         model = Book
@@ -23,7 +23,7 @@ class BookSerializer(serializers.ModelSerializer):
 
 
 class BookListSerializer(serializers.ModelSerializer):
-    loans = LoanSerializer(source='loan_set', many=True)
+    borrows = BorrowSerializer(source='borrow_set', many=True)
 
     class Meta:
         model = Book

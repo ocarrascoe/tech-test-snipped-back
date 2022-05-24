@@ -10,11 +10,11 @@ class BookRepository:
 
     @staticmethod
     def get_available_books() -> List[Book]:
-        return Book.objects.exclude(loan__isnull=False).filter(eliminado=False).all()
+        return Book.objects.exclude(borrow__isnull=False).filter(eliminado=False).all()
 
     @staticmethod
-    def get_loaned_books() -> List[Book]:
-        return Book.objects.exclude(loan__isnull=True).filter(eliminado=False).all()
+    def get_borrowed_books() -> List[Book]:
+        return Book.objects.exclude(borrow__isnull=True).filter(eliminado=False).all()
 
     @staticmethod
     def get_book(book_id: int) -> Book:

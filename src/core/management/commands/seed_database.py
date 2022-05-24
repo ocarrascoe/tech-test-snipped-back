@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand
 from core.management.data import *
 
 from apps.book.models import Book
-from apps.loan.models import Loan
+from apps.borrow.models import Borrow
 from apps.user.models import User
 
 # python manage.py seed --mode=refresh
@@ -30,7 +30,7 @@ class Command(BaseCommand):
 def clear_data():
     """Deletes all the table data"""
     User.objects.all().delete()
-    Loan.objects.all().delete()
+    Borrow.objects.all().delete()
     Book.objects.all().delete()
 
 
@@ -50,13 +50,13 @@ def create_books():
     print('Books created.')
 
 
-def create_loans():
-    print('Creating loans...')
+def create_borrows():
+    print('Creating borrows...')
     user = User.objects.filter(nombre='Omar').get()
     book = Book.objects.filter(titulo='Don Quixote').get()
-    loan = Loan(librocodigo=book, usuariocodigo=user)
-    loan.save()
-    print('Loans created.')
+    borrow = Borrow(librocodigo=book, usuariocodigo=user)
+    borrow.save()
+    print('Borrows created.')
 
 
 def run_seed(self, mode):
@@ -79,5 +79,5 @@ def run_seed(self, mode):
     else:
         create_users()
         create_books()
-        create_loans()
+        create_borrows()
     return
