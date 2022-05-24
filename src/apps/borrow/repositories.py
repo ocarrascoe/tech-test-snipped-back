@@ -9,6 +9,6 @@ class BorrowRepository:
         return Borrow.objects.create(usuariocodigo=user, librocodigo=book)
 
     @staticmethod
-    def return_book(user_id, book_id) -> Borrow:
-        return Borrow.objects.filter(usuariocodigo_id=user_id, librocodigo_id=book_id, fechadevolucion=None).update(
+    def return_book(book_id) -> Borrow:
+        return Borrow.objects.filter(librocodigo_id=book_id, fechadevolucion__isnull=True).update(
             fechadevolucion=timezone.now())
