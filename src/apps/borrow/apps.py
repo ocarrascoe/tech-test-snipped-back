@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class LoanConfig(AppConfig):
+class BorrowConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.loan'
+    name = 'apps.borrow'

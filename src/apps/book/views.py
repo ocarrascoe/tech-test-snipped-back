@@ -49,7 +49,7 @@ class BookAvailableListView(APIView):
         return Response(response['data'], status=response['status'])
 
 
-class BookLoanedListView(APIView):
+class BookBorrowedListView(APIView):
     def get(self, format=None):
-        response = BookUseCases().get_loaned_books()
+        response = BookUseCases().get_borrowed_books()
         return Response(response['data'], status=response['status'])
