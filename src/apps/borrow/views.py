@@ -14,6 +14,5 @@ class BorrowDetailView(APIView):
 class BorrowBookView(APIView):
     # Create new book
     def post(self, request, format=None):
-        response = BorrowUseCases().return_book(user_id=request.data['user_id'],
-                                                  book_id=request.data['book_id'])
+        response = BorrowUseCases().return_book(book_id=request.data)
         return Response(response['data'], status=response['status'])
